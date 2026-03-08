@@ -910,4 +910,4 @@ Valid values: `free`, `starter`, `team`, `business`.
 
 ---
 
-*For security details, see SECURITY.md (in the main repository). For privacy policy, see [docs/PRIVACY_POLICY.md](PRIVACY_POLICY.md). For architecture, see ARCHITECTURE.md (in the main repository).*
+*For privacy and data policy, see [Privacy & Data Policy](privacy-policy). For source code and architecture details, see the [FlakeTriage repository](https://github.com/marketplace/flaketriage).*

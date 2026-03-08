@@ -1,4 +1,4 @@
-title: FlakeTriage — Documentation
+title: FlakeTriage Docs
 description: >-
   Automatically rerun failed GitHub Actions workflows and classify suspected
   flakes — before your team wastes time investigating.
@@ -8,5 +8,4 @@ markdown: kramdown
 plugins:
   - jekyll-seo-tag
 
-# SEO defaults
 url: https://docs.binarytechtoppers.dev

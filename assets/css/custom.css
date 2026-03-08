@@ -1,47 +1,74 @@
-/* FlakeTriage docs — navigation and branding overrides */
+/* FlakeTriage Docs — product docs styling */
 
-.site-nav {
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid #e5e5e5;
+/* --- Header / Branding --- */
+header h1 {
+  font-size: 22px;
+  margin-bottom: 4px;
 }
 
-.site-nav h3 {
-  font-size: 13px;
+header h1 a {
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+  letter-spacing: -0.01em;
+}
+
+header .tagline {
+  color: #555;
+  font-size: 12.5px;
+  line-height: 1.45;
+  margin: 0 0 16px;
+}
+
+/* --- Sidebar Navigation --- */
+.site-nav {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.site-nav h3,
+#section-nav h3 {
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #666;
-  margin: 12px 0 6px;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin: 14px 0 5px;
+  padding: 0;
 }
 
 .site-nav h3:first-child {
   margin-top: 0;
 }
 
-.site-nav ul {
+.site-nav ul,
+#section-nav ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
-.site-nav ul li {
+.site-nav ul li,
+#section-nav ul li {
   margin: 0;
   padding: 0;
 }
 
-.site-nav ul li a {
+.site-nav ul li a,
+#section-nav ul li a {
   display: block;
-  padding: 4px 8px;
+  padding: 3px 8px;
   font-size: 13px;
   color: #267CB9;
   text-decoration: none;
   border-radius: 3px;
-  transition: background-color 0.15s ease;
+  line-height: 1.5;
+  transition: background-color 0.12s ease;
 }
 
-.site-nav ul li a:hover {
-  background-color: #f0f7fc;
+.site-nav ul li a:hover,
+#section-nav ul li a:hover {
+  background-color: #f0f6fc;
   color: #1a5c8c;
 }
 
@@ -51,21 +78,60 @@
   font-weight: 600;
 }
 
-/* Tighter header for product-first feel */
-header h1 a {
-  color: #222 !important;
-  text-decoration: none !important;
+/* Section nav (On This Page) — slightly smaller, indented feel */
+#section-nav {
+  margin-top: 6px;
+  padding-top: 0;
 }
 
-header p {
-  color: #666;
+#section-nav h3 {
+  margin-top: 10px;
+  color: #267CB9;
+  font-size: 10.5px;
 }
 
-/* Better table styling */
+#section-nav ul li a {
+  font-size: 12px;
+  padding: 2px 8px;
+  color: #4a4a4a;
+}
+
+#section-nav ul li a:hover {
+  color: #267CB9;
+  background-color: #f5f8fb;
+}
+
+/* --- Main Content --- */
+section h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-top: 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #267CB9;
+}
+
+section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  margin-top: 2em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+}
+
+section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* --- Tables --- */
 table {
   border-collapse: collapse;
   width: 100%;
   margin: 16px 0;
+  font-size: 14px;
 }
 
 table th,
@@ -76,10 +142,66 @@ table td {
 }
 
 table th {
-  background-color: #f8f8f8;
+  background-color: #f6f8fa;
   font-weight: 600;
+  font-size: 13px;
 }
 
 table tr:nth-child(even) {
-  background-color: #fafafa;
+  background-color: #fafbfc;
+}
+
+/* --- Blockquote (info callouts) --- */
+blockquote {
+  border-left: 3px solid #267CB9;
+  margin: 16px 0;
+  padding: 8px 16px;
+  background-color: #f8fbff;
+  color: #333;
+}
+
+blockquote p {
+  margin: 4px 0;
+}
+
+/* --- Code --- */
+code {
+  background-color: #f4f4f4;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+pre {
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  padding: 14px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* --- Footer --- */
+footer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+footer p {
+  color: #999;
+  font-size: 11px;
+}
+
+/* --- Responsive --- */
+@media print, screen and (max-width: 960px) {
+  #section-nav {
+    display: none;
+  }
 }

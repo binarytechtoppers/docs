@@ -8,58 +8,6 @@ permalink: /flaketriage/user-guide
 
 > **Audience:** Developers and engineering managers who install FlakeTriage on their GitHub repositories.  
 > **Prerequisites:** A GitHub account, at least one repository with GitHub Actions workflows.  
-> **Last updated:** 2026-06-15
-
----
-
-## Table of Contents
-
-- [Quick Start](#quick-start)
-- [Installation](#installation)
-  - [Organization vs Repository Install](#organization-vs-repository-install)
-  - [Required Permissions](#required-permissions)
-  - [Webhook Events](#webhook-events)
-- [Configuration](#configuration)
-  - [Config File Location](#config-file-location)
-  - [Configuration Reference](#configuration-reference)
-  - [Example Configs](#example-configs)
-- [How It Works](#how-it-works)
-  - [Automatic Rerun Flow](#automatic-rerun-flow)
-  - [What Triggers a Rerun](#what-triggers-a-rerun)
-  - [What Gets Skipped](#what-gets-skipped)
-  - [Outcome Classification](#outcome-classification)
-  - [Categorization Heuristic](#categorization-heuristic)
-- [Reading Check Run Results](#reading-check-run-results)
-  - [Rerun Triggered](#rerun-triggered)
-  - [Suspected Flake](#suspected-flake)
-  - [Likely Legit Failure](#likely-legit-failure)
-  - [Skipped — Budget Exhausted](#skipped--budget-exhausted)
-  - [Skipped — Policy Denied](#skipped--policy-denied)
-  - [Skipped — Disabled by Config](#skipped--disabled-by-config)
-- [Manual Retry (Comment Command)](#manual-retry-comment-command)
-  - [Syntax](#syntax)
-  - [How to Find the Run ID](#how-to-find-the-run-id)
-  - [Permission Requirements](#permission-requirements)
-  - [Rate Limits](#rate-limits)
-  - [What You Will See](#what-you-will-see)
-  - [Manual Retry Outcomes](#manual-retry-outcomes)
-- [Plans & Limits](#plans--limits)
-  - [Plan Tiers](#plan-tiers)
-  - [How Budget Enforcement Works](#how-budget-enforcement-works)
-  - [What Happens When Budget Is Exhausted](#what-happens-when-budget-is-exhausted)
-  - [Tier Resolution](#tier-resolution)
-- [Impact & Time Saved](#impact--time-saved)
-  - [Check Run Mini-Card](#check-run-mini-card)
-  - [Configuring Time Estimates](#configuring-time-estimates)
-  - [Weekly Impact Digest](#weekly-impact-digest)
-  - [`/impact` API Endpoint](#impact-api-endpoint)
-- [API / Telemetry Endpoints](#api--telemetry-endpoints)
-  - [Authentication](#authentication)
-  - [Endpoints Reference](#endpoints-reference)
-  - [Request Examples (PowerShell)](#request-examples-powershell)
-- [Troubleshooting](#troubleshooting)
-- [FAQ](#faq)
-- [Upgrade / Downgrade Notes](#upgrade--downgrade-notes)
 
 ---
 

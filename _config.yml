@@ -1,4 +1,12 @@
-title: Binary Tech Toppers — Documentation
-description: Documentation hub for Binary Tech Toppers products
+title: FlakeTriage — Documentation
+description: >-
+  Automatically rerun failed GitHub Actions workflows and classify suspected
+  flakes — before your team wastes time investigating.
 theme: jekyll-theme-minimal
 markdown: kramdown
+
+plugins:
+  - jekyll-seo-tag
+
+# SEO defaults
+url: https://docs.binarytechtoppers.dev

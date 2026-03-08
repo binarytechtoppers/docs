@@ -1,0 +1,85 @@
+/* FlakeTriage docs — navigation and branding overrides */
+
+.site-nav {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.site-nav h3 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin: 12px 0 6px;
+}
+
+.site-nav h3:first-child {
+  margin-top: 0;
+}
+
+.site-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+.site-nav ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav ul li a {
+  display: block;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: #267CB9;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background-color 0.15s ease;
+}
+
+.site-nav ul li a:hover {
+  background-color: #f0f7fc;
+  color: #1a5c8c;
+}
+
+.site-nav ul li a.active {
+  background-color: #267CB9;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Tighter header for product-first feel */
+header h1 a {
+  color: #222 !important;
+  text-decoration: none !important;
+}
+
+header p {
+  color: #666;
+}
+
+/* Better table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f8f8f8;
+  font-weight: 600;
+}
+
+table tr:nth-child(even) {
+  background-color: #fafafa;
+}

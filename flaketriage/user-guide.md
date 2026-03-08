@@ -8,7 +8,7 @@ permalink: /flaketriage/user-guide
 
 > **Audience:** Developers and engineering managers who install FlakeTriage on their GitHub repositories.  
 > **Prerequisites:** A GitHub account, at least one repository with GitHub Actions workflows.  
-> **Last updated:** 2026-03-09
+> **Last updated:** 2026-06-15
 
 ---
 
@@ -48,6 +48,11 @@ permalink: /flaketriage/user-guide
   - [How Budget Enforcement Works](#how-budget-enforcement-works)
   - [What Happens When Budget Is Exhausted](#what-happens-when-budget-is-exhausted)
   - [Tier Resolution](#tier-resolution)
+- [Impact & Time Saved](#impact--time-saved)
+  - [Check Run Mini-Card](#check-run-mini-card)
+  - [Configuring Time Estimates](#configuring-time-estimates)
+  - [Weekly Impact Digest](#weekly-impact-digest)
+  - [`/impact` API Endpoint](#impact-api-endpoint)
 - [API / Telemetry Endpoints](#api--telemetry-endpoints)
   - [Authentication](#authentication)
   - [Endpoints Reference](#endpoints-reference)
@@ -563,7 +568,7 @@ When you post `/flaketriage retry <run_id>` and the command passes rate-limit an
 | **Team** | Up to 300 | Yes | $30 | $300 |
 | **Business** | Up to 1000 | Yes | $99 | $990 |
 
-All plans include: Check Run evidence, policy engine, config caching, structured logging, Prometheus metrics, ROI/export/hotspot endpoints.
+All plans include: Check Run evidence, policy engine, config caching, structured logging, Prometheus metrics, impact/export/hotspot endpoints.
 
 > For full pricing details be sure to see the Marketplace listing pricing section.
 
@@ -600,9 +605,65 @@ Per-repo overrides are available via `FLAKETRIAGE_TIER_OVERRIDES` (JSON map, env
 
 ---
 
+## Impact & Time Saved
+
+FlakeTriage provides delivery-impact visibility directly inside GitHub — no separate dashboard required.
+
+### Check Run Mini-Card
+
+Every Check Run created by FlakeTriage includes a **Time Saved** mini-card at the bottom. The mini-card shows:
+
+| Field | Description |
+|-------|-------------|
+| **Auto rerun triggered** | Whether FlakeTriage triggered an automatic rerun |
+| **Result** | Outcome: Suspected Flake, Likely Legit Failure, Skipped, or Rerun Pending |
+| **Time-to-green** | Minutes between rerun request and successful completion (suspected flake only) |
+| **Estimated developer time saved** | Estimated minutes saved by avoiding manual investigation |
+
+**Initial triage (rerun pending):**
+- Shows "Rerun Pending" result — time savings appear after rerun completes.
+
+**Outcome update (rerun completed):**
+- **Suspected Flake:** Shows time-to-green and estimated dev time saved.
+- **Likely Legit Failure:** No time savings — manual investigation may be needed.
+
+### Configuring Time Estimates
+
+All estimates use configurable values from `.github/flaketriage.yml`:
+
+```yaml
+roi:
+  estimated_manual_rerun_minutes: 3     # How long a manual rerun takes (default: 3)
+  estimated_context_switch_minutes: 2   # Context-switch overhead (default: 2)
+```
+
+**Formula:** `estimated_dev_time_saved = 1 × (manual_rerun + context_switch)` per suspected flake.
+
+FlakeTriage shows time savings only — no dollar or cost estimates.
+
+### Weekly Impact Digest
+
+FlakeTriage can post a **weekly impact digest** as a GitHub Issue in your repository. The digest summarizes:
+
+- Suspected flakes detected
+- Total reruns triggered and classified
+- Estimated developer time saved
+- Skip breakdown by reason (budget, policy, etc.)
+- Budget exhaustion events
+
+The digest uses an **idempotent issue** — the same issue is updated each week rather than creating new ones. Look for issues with the `flaketriage-digest` label.
+
+### `/impact` API Endpoint
+
+The `/impact` endpoint returns a comprehensive JSON impact summary. See [API / Telemetry Endpoints](#api--telemetry-endpoints) for usage and examples. The `/roi` endpoint is kept as a deprecated alias.
+
+> **Important:** All "Estimated" values are based on configured assumptions, not certainties. FlakeTriage uses the word "Estimated" wherever counterfactual savings are shown.
+
+---
+
 ## API / Telemetry Endpoints
 
-FlakeTriage exposes four telemetry endpoints for monitoring and analytics. These are available on the running FlakeTriage server (not on GitHub).
+FlakeTriage exposes five telemetry endpoints for monitoring and analytics. These are available on the running FlakeTriage server (not on GitHub).
 
 ### Authentication
 
@@ -622,8 +683,9 @@ All telemetry endpoints require a **bearer token** set via the `FLAKETRIAGE_METR
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `GET /metrics` | GET | Prometheus-format metrics (all `flaketriage_*` counters and gauges) |
-| `GET /roi` | GET | JSON ROI summary (reruns attempted, successful, skipped, estimated time saved) |
-| `GET /export` | GET | Export ROI + outcome data. Query: `?format=json` (default) or `?format=csv` |
+| `GET /impact` | GET | JSON impact summary (reruns attempted, successful, skipped, estimated time saved) |
+| `GET /roi` | GET | Deprecated alias for `/impact` — returns identical data |
+| `GET /export` | GET | Export impact + outcome data. Query: `?format=json` (default) or `?format=csv` |
 | `GET /hotspots` | GET | Top N hotspot entries by count. Query: `?limit=N` (default 10, max 50) |
 
 **Additional operational endpoints (no auth required):**
@@ -643,8 +705,8 @@ $baseUrl = "https://your-flaketriage-instance.fly.dev"
 # Prometheus metrics
 Invoke-RestMethod -Uri "$baseUrl/metrics" -Headers $headers
 
-# ROI summary
-Invoke-RestMethod -Uri "$baseUrl/roi" -Headers $headers
+# Impact summary
+Invoke-RestMethod -Uri "$baseUrl/impact" -Headers $headers
 
 # Export as JSON
 Invoke-RestMethod -Uri "$baseUrl/export?format=json" -Headers $headers
@@ -660,22 +722,32 @@ Invoke-RestMethod -Uri "$baseUrl/hotspots?limit=10" -Headers $headers
 Invoke-RestMethod -Uri "$baseUrl/healthz"
 ```
 
-**Example `/roi` response:**
+**Example `/impact` response:**
 
 ```json
 {
+  "suspected_flake_count": 31,
   "total_reruns_attempted": 47,
-  "reruns_successful": 31,
-  "reruns_failed": 16,
+  "reruns_classified": 31,
+  "reruns_pending_or_failed": 16,
   "reruns_skipped": {
-    "budget_exhausted": 5,
-    "policy_denied": 12,
+    "budget": 5,
+    "policy": 12,
     "already_rerun": 2
   },
   "reruns_skipped_total": 19,
-  "estimated_time_saved_minutes": 465,
-  "heuristic": "Each completed triage saves ~15min of developer investigation time",
-  "window": "since_start"
+  "estimated_manual_minutes_avoided": 155,
+  "ci_minutes_added": 0,
+  "budget_exhaustion_count": 5,
+  "impact_config": {
+    "estimated_manual_rerun_minutes": 3,
+    "estimated_context_switch_minutes": 2
+  },
+  "formulas": {
+    "estimated_manual_minutes_avoided": "suspected_flake_count(31) × (estimated_manual_rerun_minutes(3) + estimated_context_switch_minutes(2)) = 155"
+  },
+  "window": "since_start",
+  "disclaimer": "All saved-time figures are estimates based on configured assumptions, not certainties."
 }
 ```
 
